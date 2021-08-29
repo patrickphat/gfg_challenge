@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 *.json
 *.csv
+*.pkl
 *.zip
 
 # C extensions
