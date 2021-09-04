@@ -1,4 +1,5 @@
 from torch.utils.data import Dataset
+import random
 
 class TripletDataset(Dataset):
     def __init__(self, X, y):
@@ -6,17 +7,20 @@ class TripletDataset(Dataset):
         self.y = y
 
     def __getitem__(self, idx):
-        class_label = y[idx]
+        class_label = self.y[idx]
 
 
-        pos_mask = X[y==class_label]
-        neg_mask = Y[y!=class_label]
+        pos_mask = self.y==class_label
+        neg_mask = self.y!=class_label
 
-        pos_idx = np.choice([i for i, x in enumerate(pos_mask) if x])
-        neg_idx = np.choice([i for i, x in enumerate(neg_mask) if x])
+        pos_idx = random.choice([i for i, x in enumerate(pos_mask) if x])
+        neg_idx = random.choice([i for i, x in enumerate(neg_mask) if x])
 
-        anchor = X[idx]
-        positive = X[pos_idx]
-        negative = X[neg_idx]
+        anchor = self.X[idx]
+        positive = self.X[pos_idx]
+        negative = self.X[neg_idx]
         
-        return anchor, positive, negative
+        return anchor, negative, positive
+    
+    def __len__(self):
+        return self.X.shape[0] 
